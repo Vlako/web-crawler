@@ -32,7 +32,7 @@ def main(section, area, query, item_count):
 
     area = pytils.translit.translify(area)
     base_url = 'https://www.avito.ru'
-    url = base_url + '/{area}/{section}'.format(area=area, section=section)
+    url = base_url + '/{area}/{section}'.format(area=area, section=sections[section])
 
     page_num = 1
     while item_count > 0:
