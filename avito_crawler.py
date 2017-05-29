@@ -2,23 +2,64 @@ import lxml.html as html
 from pymongo import MongoClient
 import argparse
 import logging
-import pytils
 import requests
 import random
 logging.basicConfig(level=logging.INFO)
 
-sections = {'личные вещи': 'lichnye_veschi',
-            'транспорт': 'transport',
-            'для дома и дачи': 'dlya_doma_i_dachi',
-            'бытовая электроника': 'bytovaya_elektronika',
-            'xобби и отдых': 'hobbi_i_otdyh',
-            'недвижимость': 'nedvizhimost',
-            'работа': 'rabota',
-            'услуги': 'uslugi',
-            'животные': 'zhivotnye',
-            'для бизнеса': 'dlya_biznesa'}
+sections = {
+    'личные вещи': 'lichnye_veschi',
+    'транспорт': 'transport',
+    'для дома и дачи': 'dlya_doma_i_dachi',
+    'бытовая электроника': 'bytovaya_elektronika',
+    'xобби и отдых': 'hobbi_i_otdyh',
+    'недвижимость': 'nedvizhimost',
+    'работа': 'rabota',
+    'услуги': 'uslugi',
+    'животные': 'zhivotnye',
+    'для бизнеса': 'dlya_biznesa'
+}
 
 proxies = []
+
+letters = {
+    ' ': '_',
+    'а': 'a',
+    'б': 'b',
+    'в': 'v',
+    'г': 'g',
+    'д': 'd',
+    'е': 'e',
+    'ж': 'zh',
+    'з': 'z',
+    'и': 'i',
+    'й': 'y',
+    'к': 'k',
+    'л': 'l',
+    'м': 'm',
+    'н': 'n',
+    'о': 'o',
+    'п': 'p',
+    'р': 'r',
+    'с': 's',
+    'т' : 't',
+    'у': 'u',
+    'ф': 'f',
+    'х': 'h',
+    'ц': 'ts',
+    'ч': 'ch',
+    'ш': 'sh',
+    'щ': 'sch',
+    'ъ': '',
+    'ы': 'y',
+    'ь': '',
+    'э': 'e',
+    'ю': 'yu',
+    'я': 'ya'
+}
+
+
+def translify(word):
+    return ''.join(map(lambda x: letters[x], word.lower()))
 
 
 def main(section, area, query, item_count):
@@ -30,7 +71,7 @@ def main(section, area, query, item_count):
     db['avito_items'].drop()
     collection = db['avito_items']
 
-    area = pytils.translit.translify(area)
+    area = translify(area)
     base_url = 'https://www.avito.ru'
     url = base_url + '/{area}/{section}'.format(area=area, section=sections[section])
 
